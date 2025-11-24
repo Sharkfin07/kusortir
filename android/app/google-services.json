@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "151385656356",
+    "project_id": "kusortir",
+    "storage_bucket": "kusortir.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151385656356:android:8f3628ded261787d875cb1",
+        "android_client_info": {
+          "package_name": "com.example.kusortir"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwJJcoeaA0Ze7E5O3QzGcJ2a0frSn2OZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
