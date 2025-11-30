@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kusortir/firebase/firebase_helper.dart';
 import 'package:kusortir/models/item_model.dart';
+import 'package:kusortir/widgets/kusortir_logo.dart';
 
 class AddItemForm extends StatefulWidget {
   const AddItemForm({super.key});
@@ -77,7 +78,7 @@ class _AddItemFormState extends State<AddItemForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tambah Item')),
+      appBar: AppBar(title: const SmallLogo(text: "Kutambah")),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -160,6 +161,7 @@ class _AddItemFormState extends State<AddItemForm> {
     );
   }
 
+  // * Field khusus untuk menerima String
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
@@ -176,6 +178,7 @@ class _AddItemFormState extends State<AddItemForm> {
     );
   }
 
+  // * Field khusus untuk menerima number
   Widget _buildNumberField({
     required TextEditingController controller,
     required String label,

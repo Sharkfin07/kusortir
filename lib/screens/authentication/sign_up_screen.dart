@@ -57,57 +57,66 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 480),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(labelText: 'Email'),
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return 'Enter email';
-                      if (!v.contains('@')) return 'Enter a valid email';
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(labelText: 'Password'),
-                    obscureText: true,
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return 'Enter password';
-                      if (v.length < 6) return 'Password too short';
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  _loading
-                      ? const CircularProgressIndicator()
-                      : SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: _signUp,
-                            child: const Text('Create account'),
-                          ),
-                        ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Welcome to Kusortir!", style: TextStyle(fontSize: 30)),
+                SizedBox(height: 40),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('Already have an account?'),
-                      TextButton(
-                        onPressed: () => Navigator.of(
-                          context,
-                        ).pushReplacementNamed('/sign-in'),
-                        child: const Text('Sign In'),
+                      TextFormField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(labelText: 'Email'),
+                        validator: (v) {
+                          if (v == null || v.isEmpty) return 'Enter email';
+                          if (!v.contains('@')) return 'Enter a valid email';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: const InputDecoration(
+                          labelText: 'Password',
+                        ),
+                        obscureText: true,
+                        validator: (v) {
+                          if (v == null || v.isEmpty) return 'Enter password';
+                          if (v.length < 6) return 'Password too short';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      _loading
+                          ? const CircularProgressIndicator()
+                          : SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _signUp,
+                                child: const Text('Create account'),
+                              ),
+                            ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Already have an account?'),
+                          TextButton(
+                            onPressed: () => Navigator.of(
+                              context,
+                            ).pushReplacementNamed('/sign-in'),
+                            child: const Text('Sign In'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

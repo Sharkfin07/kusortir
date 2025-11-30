@@ -1,3 +1,5 @@
+// * Selamat datang di source code Kusortir!
+
 import 'package:flutter/material.dart';
 import 'package:kusortir/screens/homescreen.dart';
 import 'package:firebase_core/firebase_core.dart';

@@ -3,6 +3,7 @@ import 'package:kusortir/firebase/firebase_helper.dart';
 import 'package:kusortir/firebase/auth_helper.dart' as auth_helper;
 import 'package:kusortir/models/item_model.dart';
 import 'package:kusortir/widgets/item.dart';
+import 'package:kusortir/widgets/kusortir_logo.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -57,7 +58,9 @@ class _HomescreenState extends State<Homescreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inventory'),
+        title: const SmallLogo(text: "Kucek"),
+        leading: null,
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             tooltip: 'Logout',

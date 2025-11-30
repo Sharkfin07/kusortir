@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kusortir/firebase/auth_helper.dart' as auth_helper;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kusortir/widgets/kusortir_logo.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -57,57 +58,66 @@ class _SignInScreenState extends State<SignInScreen> {
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 480),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(labelText: 'Email'),
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return 'Enter email';
-                      if (!v.contains('@')) return 'Enter a valid email';
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(labelText: 'Password'),
-                    obscureText: true,
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return 'Enter password';
-                      if (v.length < 6) return 'Password too short';
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  _loading
-                      ? const CircularProgressIndicator()
-                      : SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: _signIn,
-                            child: const Text('Sign In'),
-                          ),
-                        ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                LargeLogo(),
+                SizedBox(height: 40),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('Don\'t have an account?'),
-                      TextButton(
-                        onPressed: () => Navigator.of(
-                          context,
-                        ).pushReplacementNamed('/sign-up'),
-                        child: const Text('Sign Up'),
+                      TextFormField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(labelText: 'Email'),
+                        validator: (v) {
+                          if (v == null || v.isEmpty) return 'Enter email';
+                          if (!v.contains('@')) return 'Enter a valid email';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: const InputDecoration(
+                          labelText: 'Password',
+                        ),
+                        obscureText: true,
+                        validator: (v) {
+                          if (v == null || v.isEmpty) return 'Enter password';
+                          if (v.length < 6) return 'Password too short';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      _loading
+                          ? const CircularProgressIndicator()
+                          : SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _signIn,
+                                child: const Text('Sign In'),
+                              ),
+                            ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Don\'t have an account?'),
+                          TextButton(
+                            onPressed: () => Navigator.of(
+                              context,
+                            ).pushReplacementNamed('/sign-up'),
+                            child: const Text('Sign Up'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
