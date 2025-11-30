@@ -3,6 +3,7 @@ import 'package:kusortir/firebase/firebase_helper.dart';
 import 'package:kusortir/firebase/auth_helper.dart' as auth_helper;
 import 'package:kusortir/models/item_model.dart';
 import 'package:kusortir/widgets/item.dart';
+import 'package:kusortir/screens/item_detail.dart';
 import 'package:kusortir/widgets/kusortir_logo.dart';
 
 class Homescreen extends StatefulWidget {
@@ -54,6 +55,15 @@ class _HomescreenState extends State<Homescreen> {
     }
   }
 
+  void _openDetail(Item item) {
+    final docId = item.documentId;
+    if (docId == null) return;
+    Navigator.of(context).pushNamed(
+      '/item-detail',
+      arguments: ItemDetailArguments(documentId: docId, initialItem: item),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,13 +111,7 @@ class _HomescreenState extends State<Homescreen> {
                   final item = items[index];
                   return ItemCard(
                     item: item,
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Detail ${item.name} belum tersedia.'),
-                        ),
-                      );
-                    },
+                    onTap: () => _openDetail(item),
                     onDelete: () => _handleDelete(item),
                   );
                 },

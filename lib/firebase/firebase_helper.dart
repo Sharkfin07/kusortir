@@ -30,6 +30,25 @@ class FirestoreHelper {
     );
   }
 
+  // * Stream single item detail
+  Stream<Item?> watchItem(String documentId) {
+    return itemRef.doc(documentId).snapshots().map((snapshot) {
+      final item = snapshot.data();
+      if (item == null) return null;
+      item.documentId = snapshot.id;
+      return item;
+    });
+  }
+
+  // * Ambil item sekali
+  Future<Item?> getItem(String documentId) async {
+    final snapshot = await itemRef.doc(documentId).get();
+    final item = snapshot.data();
+    if (item == null) return null;
+    item.documentId = snapshot.id;
+    return item;
+  }
+
   Item _mapDoc(QueryDocumentSnapshot<Item> doc) {
     final item = doc.data();
     item.documentId = doc.id;
