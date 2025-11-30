@@ -25,9 +25,10 @@ class AppTheme {
   /// Returns ThemeData configured for light mode
   static ThemeData light() {
     return ThemeData(
+      fontFamily: 'NotoSans',
       colorScheme: _lightColorScheme,
       useMaterial3: true,
-      scaffoldBackgroundColor: _lightColorScheme.background,
+      scaffoldBackgroundColor: _lightColorScheme.surface,
       appBarTheme: AppBarTheme(
         backgroundColor: _lightColorScheme.primary,
         foregroundColor: _lightColorScheme.onPrimary,
@@ -50,9 +51,10 @@ class AppTheme {
   /// Returns ThemeData configured for dark mode
   static ThemeData dark() {
     return ThemeData(
+      fontFamily: 'NotoSans',
       colorScheme: _darkColorScheme,
       useMaterial3: true,
-      scaffoldBackgroundColor: _darkColorScheme.background,
+      scaffoldBackgroundColor: _darkColorScheme.surface,
       appBarTheme: AppBarTheme(
         backgroundColor: _darkColorScheme.surface,
         foregroundColor: _darkColorScheme.onSurface,
@@ -77,15 +79,15 @@ class AppTheme {
       displayLarge: TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.bold,
-        color: colors.onBackground,
+        color: colors.onSurface,
       ),
       titleLarge: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: colors.onBackground,
+        color: colors.onSurface,
       ),
-      bodyLarge: TextStyle(fontSize: 16, color: colors.onBackground),
-      bodyMedium: TextStyle(fontSize: 14, color: colors.onBackground),
+      bodyLarge: TextStyle(fontSize: 16, color: colors.onSurface),
+      bodyMedium: TextStyle(fontSize: 14, color: colors.onSurface),
     );
   }
 }
