@@ -11,6 +11,8 @@ Item itemFromJson(String str) => Item.fromJson(json.decode(str));
 String itemToJson(Item data) => json.encode(data.toJson());
 
 class Item {
+  /// Firestore document id (not part of JSON schema)
+  String? documentId;
   int itemId;
   String name;
   String description;
@@ -20,6 +22,7 @@ class Item {
   String receivedAt;
 
   Item({
+    this.documentId,
     required this.itemId,
     required this.name,
     required this.description,

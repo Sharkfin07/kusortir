@@ -1,8 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-/// Simple authentication helper wrapping `firebase_auth` calls.
-/// Keeps auth-related calls in one place so UI code stays thin.
-
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 User? currentUser() => _auth.currentUser;
