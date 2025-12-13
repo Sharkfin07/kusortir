@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kusortir/data/firebase/firebase_helper.dart';
-import 'package:kusortir/data/firebase/auth_helper.dart' as auth_helper;
 import 'package:kusortir/data/models/item_model.dart';
 import 'package:kusortir/widgets/item.dart';
 import 'package:kusortir/features/item/screens/item_detail.dart';
 import 'package:kusortir/widgets/kusortir_logo.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kusortir/features/authentication/bloc/auth_bloc.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -16,20 +17,6 @@ class Homescreen extends StatefulWidget {
 class _HomescreenState extends State<Homescreen> {
   final _firestore = FirestoreHelper();
 
-  @override
-  void initState() {
-    super.initState();
-    _guardAuthState();
-  }
-
-  void _guardAuthState() {
-    if (auth_helper.currentUser() == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacementNamed('/sign-in');
-      });
-    }
-  }
-
   Future<void> _handleDelete(Item item) async {
     final docId = item.documentId;
     if (docId == null) return;
@@ -40,10 +27,8 @@ class _HomescreenState extends State<Homescreen> {
     ).showSnackBar(SnackBar(content: Text('Item "${item.name}" dihapus')));
   }
 
-  Future<void> _handleSignOut() async {
-    await auth_helper.signOut();
-    if (!mounted) return;
-    Navigator.of(context).pushReplacementNamed('/sign-in');
+  void _handleSignOut() {
+    context.read<AuthBloc>().add(SignOutRequested());
   }
 
   Future<void> _handleAddItem() async {
@@ -66,58 +51,78 @@ class _HomescreenState extends State<Homescreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const SmallLogo(text: "Kucek"),
-        leading: null,
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            tooltip: 'Logout',
-            onPressed: _handleSignOut,
-            icon: const Icon(Icons.logout),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _handleAddItem,
-        icon: const Icon(Icons.add),
-        label: const Text('Tambah'),
-      ),
-      body: SafeArea(
-        child: StreamBuilder<List<Item>>(
-          stream: _firestore.watchItems(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.hasError) {
-              return Center(
-                child: Text('Terjadi kesalahan: ${snapshot.error}'),
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthUnauthenticated) {
+          Navigator.of(context).pushReplacementNamed('/sign-in');
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              final email = state is AuthAuthenticated ? state.email : '';
+              return Row(
+                children: [
+                  const SmallLogo(text: "Kucek"),
+                  if (email.isNotEmpty) ...[
+                    const SizedBox(width: 8),
+                    Text(email, style: Theme.of(context).textTheme.bodyMedium),
+                  ],
+                ],
               );
-            }
-            final items = snapshot.data ?? [];
-            if (items.isEmpty) {
-              return const _EmptyState();
-            }
-            return RefreshIndicator(
-              onRefresh: () async {
-                await _firestore.getAllItems();
-              },
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  return ItemCard(
-                    item: item,
-                    onTap: () => _openDetail(item),
-                    onDelete: () => _handleDelete(item),
-                  );
+            },
+          ),
+          leading: null,
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              tooltip: 'Logout',
+              onPressed: _handleSignOut,
+              icon: const Icon(Icons.logout),
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: _handleAddItem,
+          icon: const Icon(Icons.add),
+          label: const Text('Tambah'),
+        ),
+        body: SafeArea(
+          child: StreamBuilder<List<Item>>(
+            stream: _firestore.watchItems(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text('Terjadi kesalahan: ${snapshot.error}'),
+                );
+              }
+              final items = snapshot.data ?? [];
+              if (items.isEmpty) {
+                return const _EmptyState();
+              }
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await _firestore.getAllItems();
                 },
-              ),
-            );
-          },
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return ItemCard(
+                      item: item,
+                      onTap: () => _openDetail(item),
+                      onDelete: () => _handleDelete(item),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
