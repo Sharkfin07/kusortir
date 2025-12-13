@@ -1,14 +1,14 @@
 // * Selamat datang di source code Kusortir!
 
 import 'package:flutter/material.dart';
-import 'package:kusortir/screens/homescreen.dart';
+import 'package:kusortir/features/home/screens/homescreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kusortir/data/firebase/firebase_options.dart';
-import 'package:kusortir/screens/authentication/sign_in_screen.dart';
-import 'package:kusortir/screens/authentication/sign_up_screen.dart';
+import 'package:kusortir/features/authentication/screens/sign_in_screen.dart';
+import 'package:kusortir/features/authentication/screens/sign_up_screen.dart';
 import 'package:kusortir/theme/theme.dart';
-import 'package:kusortir/screens/add_item_form.dart';
-import 'package:kusortir/screens/item_detail.dart';
+import 'package:kusortir/features/item/screens/add_item_form.dart';
+import 'package:kusortir/features/item/screens/item_detail.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
