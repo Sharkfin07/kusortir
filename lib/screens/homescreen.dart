@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kusortir/firebase/firebase_helper.dart';
-import 'package:kusortir/firebase/auth_helper.dart' as auth_helper;
-import 'package:kusortir/models/item_model.dart';
+import 'package:kusortir/data/firebase/firebase_helper.dart';
+import 'package:kusortir/data/firebase/auth_helper.dart' as auth_helper;
+import 'package:kusortir/data/models/item_model.dart';
 import 'package:kusortir/widgets/item.dart';
 import 'package:kusortir/screens/item_detail.dart';
 import 'package:kusortir/widgets/kusortir_logo.dart';

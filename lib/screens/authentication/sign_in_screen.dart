@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kusortir/firebase/auth_helper.dart' as auth_helper;
+import 'package:kusortir/data/firebase/auth_helper.dart' as auth_helper;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kusortir/widgets/kusortir_logo.dart';
 

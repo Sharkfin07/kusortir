@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kusortir/models/item_model.dart';
+import 'package:kusortir/data/models/item_model.dart';
 
 class ItemCard extends StatelessWidget {
   const ItemCard({super.key, required this.item, this.onTap, this.onDelete});

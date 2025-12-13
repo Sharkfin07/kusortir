@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kusortir/models/item_model.dart';
+import 'package:kusortir/data/models/item_model.dart';
 
 class FirestoreHelper {
   FirestoreHelper();

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:kusortir/screens/homescreen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:kusortir/firebase/firebase_options.dart';
+import 'package:kusortir/data/firebase/firebase_options.dart';
 import 'package:kusortir/screens/authentication/sign_in_screen.dart';
 import 'package:kusortir/screens/authentication/sign_up_screen.dart';
 import 'package:kusortir/theme/theme.dart';
