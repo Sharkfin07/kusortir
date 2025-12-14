@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kusortir/firebase/firebase_helper.dart';
-import 'package:kusortir/models/item_model.dart';
-import 'package:kusortir/widgets/kusortir_logo.dart';
+import 'package:kusortir/data/firebase/firebase_helper.dart';
+import 'package:kusortir/data/models/item_model.dart';
+import 'package:kusortir/presentation/widgets/kusortir_logo.dart';
 
 class AddItemForm extends StatefulWidget {
   const AddItemForm({super.key});

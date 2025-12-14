@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kusortir/firebase/auth_helper.dart' as auth_helper;
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:kusortir/presentation/controllers/auth_controller.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -13,7 +13,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _loading = false;
+  late final AuthController _authController;
+
+  @override
+  void initState() {
+    super.initState();
+    _authController = Get.find<AuthController>();
+  }
 
   @override
   void dispose() {
@@ -22,30 +28,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
-  Future<void> _signUp() async {
+  void _signUp() {
     if (!_formKey.currentState!.validate()) return;
-    setState(() => _loading = true);
-    try {
-      await auth_helper.signUpWithEmail(
-        _emailController.text.trim(),
-        _passwordController.text,
-      );
-      if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed('/');
-    } on FirebaseAuthException catch (e) {
-      String message = 'Registration failed';
-      if (e.code == 'email-already-in-use') message = 'Email already in use.';
-      if (e.code == 'weak-password') message = 'Password too weak.';
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
-    } finally {
-      if (mounted) setState(() => _loading = false);
-    }
+    _authController.signUp(
+      _emailController.text.trim(),
+      _passwordController.text,
+    );
   }
 
   @override
@@ -91,24 +79,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      _loading
-                          ? const CircularProgressIndicator()
-                          : SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: _signUp,
-                                child: const Text('Create account'),
+                      Obx(
+                        () => _authController.isLoading.value
+                            ? const CircularProgressIndicator()
+                            : SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: _signUp,
+                                  child: const Text('Create account'),
+                                ),
                               ),
-                            ),
+                      ),
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text('Already have an account?'),
                           TextButton(
-                            onPressed: () => Navigator.of(
-                              context,
-                            ).pushReplacementNamed('/sign-in'),
+                            onPressed: () => Get.offAllNamed('/sign-in'),
                             child: const Text('Sign In'),
                           ),
                         ],

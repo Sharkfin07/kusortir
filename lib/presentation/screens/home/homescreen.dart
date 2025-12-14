@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kusortir/firebase/firebase_helper.dart';
-import 'package:kusortir/firebase/auth_helper.dart' as auth_helper;
-import 'package:kusortir/models/item_model.dart';
-import 'package:kusortir/widgets/item.dart';
-import 'package:kusortir/screens/item_detail.dart';
-import 'package:kusortir/widgets/kusortir_logo.dart';
+import 'package:get/get.dart';
+import 'package:kusortir/data/firebase/firebase_helper.dart';
+import 'package:kusortir/data/models/item_model.dart';
+import 'package:kusortir/presentation/controllers/auth_controller.dart';
+import 'package:kusortir/presentation/widgets/item.dart';
+import 'package:kusortir/presentation/screens/item/item_detail.dart';
+import 'package:kusortir/presentation/widgets/kusortir_logo.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -15,19 +16,12 @@ class Homescreen extends StatefulWidget {
 
 class _HomescreenState extends State<Homescreen> {
   final _firestore = FirestoreHelper();
+  late final AuthController _authController;
 
   @override
   void initState() {
     super.initState();
-    _guardAuthState();
-  }
-
-  void _guardAuthState() {
-    if (auth_helper.currentUser() == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacementNamed('/sign-in');
-      });
-    }
+    _authController = Get.find<AuthController>();
   }
 
   Future<void> _handleDelete(Item item) async {
@@ -41,13 +35,11 @@ class _HomescreenState extends State<Homescreen> {
   }
 
   Future<void> _handleSignOut() async {
-    await auth_helper.signOut();
-    if (!mounted) return;
-    Navigator.of(context).pushReplacementNamed('/sign-in');
+    await _authController.signOut();
   }
 
   Future<void> _handleAddItem() async {
-    final result = await Navigator.of(context).pushNamed('/add-item');
+    final result = await Get.toNamed('/add-item');
     if (result == true && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Item baru telah ditambahkan.')),
@@ -58,7 +50,7 @@ class _HomescreenState extends State<Homescreen> {
   void _openDetail(Item item) {
     final docId = item.documentId;
     if (docId == null) return;
-    Navigator.of(context).pushNamed(
+    Get.toNamed(
       '/item-detail',
       arguments: ItemDetailArguments(documentId: docId, initialItem: item),
     );

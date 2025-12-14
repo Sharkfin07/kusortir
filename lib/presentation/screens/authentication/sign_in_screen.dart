@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kusortir/firebase/auth_helper.dart' as auth_helper;
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kusortir/widgets/kusortir_logo.dart';
+import 'package:get/get.dart';
+import 'package:kusortir/presentation/controllers/auth_controller.dart';
+import 'package:kusortir/presentation/widgets/kusortir_logo.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -14,7 +14,13 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _loading = false;
+  late final AuthController _authController;
+
+  @override
+  void initState() {
+    super.initState();
+    _authController = Get.find<AuthController>();
+  }
 
   @override
   void dispose() {
@@ -23,30 +29,12 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
-  Future<void> _signIn() async {
+  void _signIn() {
     if (!_formKey.currentState!.validate()) return;
-    setState(() => _loading = true);
-    try {
-      await auth_helper.signInWithEmail(
-        _emailController.text.trim(),
-        _passwordController.text,
-      );
-      if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed('/');
-    } on FirebaseAuthException catch (e) {
-      String message = 'Authentication failed';
-      if (e.code == 'user-not-found') message = 'No user found for that email.';
-      if (e.code == 'wrong-password') message = 'Wrong password provided.';
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
-    } finally {
-      if (mounted) setState(() => _loading = false);
-    }
+    _authController.signIn(
+      _emailController.text.trim(),
+      _passwordController.text,
+    );
   }
 
   @override
@@ -92,24 +80,24 @@ class _SignInScreenState extends State<SignInScreen> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      _loading
-                          ? const CircularProgressIndicator()
-                          : SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: _signIn,
-                                child: const Text('Sign In'),
+                      Obx(
+                        () => _authController.isLoading.value
+                            ? const CircularProgressIndicator()
+                            : SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: _signIn,
+                                  child: const Text('Sign In'),
+                                ),
                               ),
-                            ),
+                      ),
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text('Don\'t have an account?'),
                           TextButton(
-                            onPressed: () => Navigator.of(
-                              context,
-                            ).pushReplacementNamed('/sign-up'),
+                            onPressed: () => Get.offAllNamed('/sign-up'),
                             child: const Text('Sign Up'),
                           ),
                         ],
