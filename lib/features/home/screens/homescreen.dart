@@ -28,7 +28,7 @@ class _HomescreenState extends State<Homescreen> {
   }
 
   void _handleSignOut() {
-    context.read<AuthBloc>().add(SignOutRequested());
+    context.read<AuthBloc>().add(SignOutEvent());
   }
 
   Future<void> _handleAddItem() async {
@@ -53,7 +53,7 @@ class _HomescreenState extends State<Homescreen> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthUnauthenticated) {
+        if (state is AuthSignedOut) {
           Navigator.of(context).pushReplacementNamed('/sign-in');
         }
       },
@@ -61,7 +61,7 @@ class _HomescreenState extends State<Homescreen> {
         appBar: AppBar(
           title: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
-              final email = state is AuthAuthenticated ? state.email : '';
+              final email = state is AuthSignedUp ? state.email : '';
               return Row(
                 children: [
                   const SmallLogo(text: "Kucek"),

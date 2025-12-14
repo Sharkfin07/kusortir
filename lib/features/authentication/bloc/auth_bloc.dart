@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kusortir/data/firebase/auth_helper.dart' as auth_helper;
@@ -8,27 +8,26 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
-    on<AuthCheckRequested>(_onCheckRequested);
-    on<SignInRequested>(_onSignInRequested);
-    on<SignUpRequested>(_onSignUpRequested);
-    on<SignOutRequested>(_onSignOutRequested);
-    on<PasswordResetRequested>(_onPasswordResetRequested);
+    on<AuthCheck>(_onCheckRequested);
+    on<SignInEvent>(_onSignInRequested);
+    on<SignUpEvent>(_onSignUpRequested);
+    on<SignOutEvent>(_onSignOutRequested);
   }
 
   Future<void> _onCheckRequested(
-    AuthCheckRequested event,
+    AuthCheck event,
     Emitter<AuthState> emit,
   ) async {
     final user = auth_helper.currentUser();
     if (user != null) {
-      emit(AuthAuthenticated(email: user.email ?? ''));
+      emit(AuthSignedUp(email: user.email ?? ''));
     } else {
-      emit(AuthUnauthenticated());
+      emit(AuthSignedOut());
     }
   }
 
   Future<void> _onSignInRequested(
-    SignInRequested event,
+    SignInEvent event,
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
@@ -37,18 +36,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         event.email,
         event.password,
       );
-      emit(AuthAuthenticated(email: cred.user?.email ?? event.email));
+      emit(AuthSignedUp(email: cred.user?.email ?? event.email));
     } on FirebaseAuthException catch (e) {
-      emit(AuthFailure(message: _mapFirebaseError(e)));
-      emit(AuthUnauthenticated());
+      emit(AuthFail(message: e.message!));
+      emit(AuthSignedOut());
     } catch (e) {
-      emit(AuthFailure(message: e.toString()));
-      emit(AuthUnauthenticated());
+      emit(AuthFail(message: e.toString()));
+      emit(AuthSignedOut());
     }
   }
 
   Future<void> _onSignUpRequested(
-    SignUpRequested event,
+    SignUpEvent event,
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
@@ -57,53 +56,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         event.email,
         event.password,
       );
-      emit(AuthAuthenticated(email: cred.user?.email ?? event.email));
+      emit(AuthSignedUp(email: cred.user?.email ?? event.email));
     } on FirebaseAuthException catch (e) {
-      emit(AuthFailure(message: _mapFirebaseError(e)));
-      emit(AuthUnauthenticated());
+      emit(AuthFail(message: e.message!));
+      emit(AuthSignedOut());
     } catch (e) {
-      emit(AuthFailure(message: e.toString()));
-      emit(AuthUnauthenticated());
+      emit(AuthFail(message: e.toString()));
+      emit(AuthSignedOut());
     }
   }
 
   Future<void> _onSignOutRequested(
-    SignOutRequested event,
+    SignOutEvent event,
     Emitter<AuthState> emit,
   ) async {
     await auth_helper.signOut();
-    emit(AuthUnauthenticated());
-  }
-
-  Future<void> _onPasswordResetRequested(
-    PasswordResetRequested event,
-    Emitter<AuthState> emit,
-  ) async {
-    emit(AuthLoading());
-    try {
-      await auth_helper.sendPasswordReset(event.email);
-      emit(AuthUnauthenticated());
-    } on FirebaseAuthException catch (e) {
-      emit(AuthFailure(message: _mapFirebaseError(e)));
-    } catch (e) {
-      emit(AuthFailure(message: e.toString()));
-    }
-  }
-
-  String _mapFirebaseError(FirebaseAuthException e) {
-    switch (e.code) {
-      case 'user-not-found':
-        return 'No user found for that email.';
-      case 'wrong-password':
-        return 'Wrong password provided.';
-      case 'email-already-in-use':
-        return 'Email already in use.';
-      case 'weak-password':
-        return 'Password too weak.';
-      case 'invalid-email':
-        return 'Email is invalid.';
-      default:
-        return e.message ?? 'Authentication error';
-    }
+    emit(AuthSignedOut());
   }
 }

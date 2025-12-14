@@ -7,14 +7,14 @@ final class AuthInitial extends AuthState {}
 
 final class AuthLoading extends AuthState {}
 
-final class AuthAuthenticated extends AuthState {
-  AuthAuthenticated({required this.email});
+final class AuthSignedUp extends AuthState {
   final String email;
+  AuthSignedUp({required this.email});
 }
 
-final class AuthUnauthenticated extends AuthState {}
+final class AuthSignedOut extends AuthState {}
 
-final class AuthFailure extends AuthState {
-  AuthFailure({required this.message});
+final class AuthFail extends AuthState {
   final String message;
+  AuthFail({required this.message});
 }

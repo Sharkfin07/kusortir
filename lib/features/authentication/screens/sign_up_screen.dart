@@ -24,7 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
     context.read<AuthBloc>().add(
-      SignUpRequested(
+      SignUpEvent(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       ),
@@ -35,9 +35,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthAuthenticated) {
+        if (state is AuthSignedUp) {
           Navigator.of(context).pushReplacementNamed('/');
-        } else if (state is AuthFailure) {
+        } else if (state is AuthFail) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.message)));

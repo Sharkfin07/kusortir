@@ -24,7 +24,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AuthBloc()..add(AuthCheckRequested()),
+      create: (_) => AuthBloc()..add(AuthCheck()),
       child: MaterialApp(
         theme: AppTheme.light(),
         darkTheme: AppTheme.dark(),
