@@ -1,6 +1,7 @@
 // * Selamat datang di source code Kusortir!
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kusortir/screens/homescreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kusortir/firebase/firebase_options.dart';
@@ -21,7 +22,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: ThemeMode.system,
