@@ -64,6 +64,18 @@ class _HomescreenState extends State<Homescreen> {
         leading: null,
         automaticallyImplyLeading: false,
         actions: [
+          Obx(() {
+            final email = _authController.user.value?.email ?? '';
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Center(
+                child: Text(
+                  email.isEmpty ? 'Signed out' : email,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
+            );
+          }),
           IconButton(
             tooltip: 'Logout',
             onPressed: _handleSignOut,

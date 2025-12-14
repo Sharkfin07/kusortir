@@ -27,7 +27,7 @@ class MainApp extends StatelessWidget {
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: ThemeMode.system,
-      initialRoute: '/sign-in',
+      initialRoute: '/',
       initialBinding: BindingsBuilder(() {
         Get.put(AuthController());
       }),
